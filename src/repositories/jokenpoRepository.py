@@ -9,7 +9,10 @@ COD_MOVE = {
 }
 
 class Repo():
-    def getResult():
+    def get_result() -> dict:
+        """
+        call this to get game result
+        """
         rule = ['Papel', 'Pedra', 'Lagarto', 'Spock', 
                 'Tesoura', 'Papel', 'Pedra', 'Lagarto', 'Spock']
         db_jokenpo = db("Jokenpo")
@@ -37,11 +40,17 @@ class Repo():
 
         return "Not Found", 404
 
-    def getPlayer(id):
+    def get_player(id: int) -> dict:
+        """
+        Use to get player name and move
+        """
         return {id : db('Jokenpo')[str(id)]}, 200
 
     
-    def insertPlayer(package):
+    def insert_player(package: dict) -> dict:
+        """
+        Use to insert a player into db
+        """
         jokenpo_db = db('Jokenpo')
         id = len(jokenpo_db) + 1
         player = {
@@ -54,16 +63,23 @@ class Repo():
         }
         insert('Jokenpo', player)
         jokenpo_db = db('Jokenpo')
+
         return {id : jokenpo_db[str(id)]}, 201
     
 
-    def updateMove(id, package):
+    def update_move(id: int, package: dict) -> str:
+        """
+        Use to change player move
+        """
         modify('Jokenpo', str(id), package['item'], package['content'])
         if package['item'] == 'move':
             modify('Jokenpo', str(id), 'cod_move', COD_MOVE[package['content']])
         return {id : db('Jokenpo')[str(id)]}, 202
 
-    def deletePlayer(id):
+    def deletePlayer(id: int) -> str:
+        """
+        Use to delete a player
+        """
         try:
             delete('Jokenpo', str(id))
             return "Sucess", 200
@@ -71,7 +87,10 @@ class Repo():
         except:
             return "Error", 404
 
-    def delete_allPlayers():
+    def delete_all_players() -> str:
+        """
+        Use to clear all players
+        """
         delete_all('Jokenpo')
 
         return 'Sucess', 200

@@ -15,19 +15,19 @@ class Jokenpo(Resource):
 
     @application.route('/jokenpo', methods=['GET'])
     def get():
-        return Repo.getResult()
+        return Repo.get_result()
 
     @application.route('/jokenpo/player/<int:id>', methods=['GET'])
-    def getPlayer(id):
-        return Repo.getPlayer(id)
+    def get_player(id):
+        return Repo.get_player(id)
     
     @application.route('/jokenpo/player', methods=['POST'])
     def post():
-        return Repo.insertPlayer(api.payload)
+        return Repo.insert_player(api.payload)
 
     @application.route('/jokenpo/player/<int:id>', methods=['PUT'])
     def put(id):
-        return Repo.updateMove(id, api.payload)
+        return Repo.update_move(id, api.payload)
     
     @application.route('/jokenpo/player/<int:id>', methods=['DELETE'])
     def delete(id):
@@ -36,4 +36,4 @@ class Jokenpo(Resource):
     
     @application.route('/jokenpo/player/all', methods=['DELETE'])
     def delete_all():
-        return Repo.delete_allPlayers()
+        return Repo.delete_all_players()
