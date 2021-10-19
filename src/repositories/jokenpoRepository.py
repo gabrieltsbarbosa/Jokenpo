@@ -8,10 +8,11 @@ COD_MOVE = {
     'Pedra': 4,
 }
 
-class Repo():
-    def get_result() -> dict:
+class JokenpoRepositoy():
+    def get_current_game_result() -> dict:
         """
-        call this to get game result
+        Get game score for currently registered players, return dict with score and
+        info of all players
         """
         rule = ['Papel', 'Pedra', 'Lagarto', 'Spock', 
                 'Tesoura', 'Papel', 'Pedra', 'Lagarto', 'Spock']
@@ -34,22 +35,26 @@ class Repo():
                 
             result = db('Jokenpo')
 
-            """delete_all('Jokenpo')"""
-
             return result, 200
 
         return "Not Found", 404
 
     def get_player(id: int) -> dict:
         """
-        Use to get player name and move
+        Get player info with id received, return dict with all player info
+
+        id: player's id
         """
         return {id : db('Jokenpo')[str(id)]}, 200
 
     
     def insert_player(package: dict) -> dict:
         """
-        Use to insert a player into db
+        Insert player into db based on package received, return dict with player info
+        package: {
+            "name": player's name
+            "move": player's move
+        }
         """
         jokenpo_db = db('Jokenpo')
         id = len(jokenpo_db) + 1
@@ -67,29 +72,37 @@ class Repo():
         return {id : jokenpo_db[str(id)]}, 201
     
 
-    def update_move(id: int, package: dict) -> str:
+    def update_move(id: int, package: dict) -> dict:
         """
-        Use to change player move
+        Change a player info based on id and package received, return player info 
+        to check changes\n
+        id: player id
+        package: {
+            "item": put here the item you want to change.
+            "content": put here the content ou want to insert.
+        }
         """
         modify('Jokenpo', str(id), package['item'], package['content'])
         if package['item'] == 'move':
             modify('Jokenpo', str(id), 'cod_move', COD_MOVE[package['content']])
         return {id : db('Jokenpo')[str(id)]}, 202
 
-    def deletePlayer(id: int) -> str:
+    def delete_player(id: int) -> str:
         """
-        Use to delete a player
+        Deletes the player with the received id, returns "True" in case of success
+
+        id: player id
         """
         try:
             delete('Jokenpo', str(id))
-            return "Sucess", 200
+            return True, 200
 
         except:
-            return "Error", 404
+            return False, 404
 
     def delete_all_players() -> str:
         """
-        Use to clear all players
+        Deletes all players, returns "True in case of success"
         """
         delete_all('Jokenpo')
 

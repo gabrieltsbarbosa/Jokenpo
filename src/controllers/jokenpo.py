@@ -2,7 +2,7 @@ from flask import Flask, request
 from flask_restx import Api, Resource
 
 from src.server.instance import server
-from src.repositories.jokenpoRepository import Repo
+from src.repositories.jokenpoRepository import JokenpoRepositoy
 
 application, api = server.application, server.api
 
@@ -21,35 +21,35 @@ class Jokenpo(Resource):
         """
         call this to get game result
         """
-        return Repo.get_result()
+        return JokenpoRepositoy.get_current_game_result()
 
     @application.route('/jokenpo/player/<int:id>', methods=['GET'])
     def get_player(id: int) -> dict:
         """
         Use to get player name and move
         """
-        return Repo.get_player(id)
+        return JokenpoRepositoy.get_player(id)
     
     @application.route('/jokenpo/player', methods=['POST'])
     def post() -> dict:
         """
         Use to insert a player into db
         """
-        return Repo.insert_player(api.payload)
+        return JokenpoRepositoy.insert_player(api.payload)
 
     @application.route('/jokenpo/player/<int:id>', methods=['PUT'])
     def put(id) -> str:
         """
         Use to change player move
         """
-        return Repo.update_move(id, api.payload)
+        return JokenpoRepositoy.update_move(id, api.payload)
     
     @application.route('/jokenpo/player/<int:id>', methods=['DELETE'])
     def delete(id: int) -> str:
         """
         Use to delete a player
         """
-        return Repo.deletePlayer(id)
+        return JokenpoRepositoy.delete_player(id)
 
     
     @application.route('/jokenpo/player/all', methods=['DELETE'])
@@ -57,4 +57,4 @@ class Jokenpo(Resource):
         """
         Use to clear all players
         """
-        return Repo.delete_all_players()
+        return JokenpoRepositoy.delete_all_players()
