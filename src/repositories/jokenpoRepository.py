@@ -8,11 +8,11 @@ COD_MOVE = {
     'Pedra': 4,
 }
 
-class JokenpoRepository():
-    def get_current_game_result() -> dict:
+class JokenpoRepository(object):
+    def get_current_game_result_detail() -> tuple:
         """
-        Get game score for currently registered players, return dict with score and
-        info of all players
+        Get game score for currently registered players, return tuple with score and
+        info of all players in a dict
         """
         rule = ['Papel', 'Pedra', 'Lagarto', 'Spock', 
                 'Tesoura', 'Papel', 'Pedra', 'Lagarto', 'Spock']
@@ -39,18 +39,38 @@ class JokenpoRepository():
 
         return "Not Found", 404
 
-    def get_player(id: int) -> dict:
+    def get_current_game_result() -> dict:
         """
-        Get player info with id received, return dict with all player info
+        Get winners for current game, return dict
+        """
+        game_detail = JokenpoRepository.get_current_game_result_detail()[0]
+        result = []
+        max_pts = 0
+
+        for i in game_detail:
+            if game_detail[i]["score"] > max_pts:
+                max_pts = game_detail[i]["score"]
+                
+        for i in game_detail:
+            if game_detail[i]["score"] == max_pts:
+                result.append(i)
+
+        return {"result": result}, 200
+
+
+    def get_player(id: int) -> tuple:
+        """
+        Get player info with id received, return tuple with all player info in a dict
 
         id: player's id
         """
         return {id : db('Jokenpo')[str(id)]}, 200
 
     
-    def insert_player(package: dict) -> dict:
+    def insert_player(package: dict) -> tuple:
         """
-        Insert player into db based on package received, return dict with player info
+        Insert player into db based on package received, return tuple with player info
+        in a dict
         package: {
             "name": player's name
             "move": player's move
@@ -72,7 +92,7 @@ class JokenpoRepository():
         return {id : jokenpo_db[str(id)]}, 201
     
 
-    def update_move(id: int, package: dict) -> dict:
+    def update_move(id: int, package: dict) -> tuple:
         """
         Change a player info based on id and package received, return player info 
         to check changes\n

@@ -19,10 +19,18 @@ class Jokenpo(Resource):
     @application.route('/jokenpo', methods=['GET'])
     def get() -> dict:
         """
-        Get game score for currently registered players, return the response from 
+        Get game winners, return the response from 
         JokenpoRepository.get_current_game_result()
         """
         return JokenpoRepository.get_current_game_result()
+
+    @application.route('/jokenpo/detail', methods=['GET'])
+    def get_detail() -> dict:
+        """
+        Get game details for currently registered players, return the response from 
+        JokenpoRepository.get_current_game_result_details()
+        """
+        return JokenpoRepository.get_current_game_result_detail()
 
     @application.route('/jokenpo/player/<int:id>', methods=['GET'])
     def get_player(id: int) -> dict:
