@@ -2,7 +2,7 @@ from flask import Flask, request
 from flask_restx import Api, Resource
 
 from src.server.instance import server
-from src.repositories.jokenpoRepository import JokenpoRepositoy
+from src.repositories.jokenpoRepository import JokenpoRepository
 
 application, api = server.application, server.api
 
@@ -12,49 +12,61 @@ class Jokenpo(Resource):
     @application.route('/health', methods=['GET'])
     def healthCheck() -> str:
         """
-        Use to check application health
+        Check application health, return True
         """
-        return 'healthCheck', 200
+        return True, 200
 
     @application.route('/jokenpo', methods=['GET'])
     def get() -> dict:
         """
-        call this to get game result
+        Get game score for currently registered players, return the response from 
+        JokenpoRepository.get_current_game_result()
         """
-        return JokenpoRepositoy.get_current_game_result()
+        return JokenpoRepository.get_current_game_result()
 
     @application.route('/jokenpo/player/<int:id>', methods=['GET'])
     def get_player(id: int) -> dict:
         """
-        Use to get player name and move
+        Get player info with id received, return return the response from
+        JokenpoRepository.get_player()
+
+        id: player's id
         """
-        return JokenpoRepositoy.get_player(id)
+        return JokenpoRepository.get_player(id)
     
     @application.route('/jokenpo/player', methods=['POST'])
     def post() -> dict:
         """
-        Use to insert a player into db
+        Insert player into db based on package received, return the response from
+        JokenpoRepository.insert_player()
         """
-        return JokenpoRepositoy.insert_player(api.payload)
+        return JokenpoRepository.insert_player(api.payload)
 
     @application.route('/jokenpo/player/<int:id>', methods=['PUT'])
     def put(id) -> str:
         """
-        Use to change player move
+        Change a player info based on id and package received, return the response from
+        JokenpoRepository.update_move()
+
+        id: player id
         """
-        return JokenpoRepositoy.update_move(id, api.payload)
+        return JokenpoRepository.update_move(id, api.payload)
     
     @application.route('/jokenpo/player/<int:id>', methods=['DELETE'])
     def delete(id: int) -> str:
         """
-        Use to delete a player
+        Deletes the player with the received id, return the response from
+        JokenpoRepository.delete_player()
+
+        id: player id
         """
-        return JokenpoRepositoy.delete_player(id)
+        return JokenpoRepository.delete_player(id)
 
     
     @application.route('/jokenpo/player/all', methods=['DELETE'])
     def delete_all() -> str:
         """
-        Use to clear all players
+        Deletes all players, return the response from
+        JokenpoRepository.delete_all_players()
         """
-        return JokenpoRepositoy.delete_all_players()
+        return JokenpoRepository.delete_all_players()

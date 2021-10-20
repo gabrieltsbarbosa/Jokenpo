@@ -8,7 +8,7 @@ COD_MOVE = {
     'Pedra': 4,
 }
 
-class JokenpoRepositoy():
+class JokenpoRepository():
     def get_current_game_result() -> dict:
         """
         Get game score for currently registered players, return dict with score and
